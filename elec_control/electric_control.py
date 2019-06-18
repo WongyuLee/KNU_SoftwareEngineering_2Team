@@ -30,44 +30,43 @@ returnedList=[]
 uuidList=[]
 
 def scan():
-        while True:
-                List = blescan.parse_events(sock, 5)
-                for beacon in List:
-                        beacon_data = beacon.split(',')
-                        _uuid = beacon_data[1]
-                        _major = beacon_data[2]
-                        _minor = beacon_data[3]
-                        _tx_power = beacon_data[4]
-                        if _uuid in uuidList:
-                                continue
-                        else:
-                                returnedList.append(beacon)
-                                uuidList.append(_uuid)
-            if _uuid == '08ffffff000102030408163412030102': 
-                                del uuidList[:]
-                                lock.acquire()
+	while True:
+		List = blescan.parse_events(sock, 5)
+		for beacon in List:
+			beacon_data = beacon.split(',')
+			_uuid = beacon_data[1]
+			_major = beacon_data[2]
+			_minor = beacon_data[3]
+			_tx_power = beacon_data[4]
+			if _uuid in uuidList:
+				continue
+			else:
+				returnedList.append(beacon)
+				uuidList.append(_uuid)
+			if _uuid == '08ffffff000102030408163412030102':
+				del uuidList[:]
+				lock.acquire()
 
 if __name__=='__main__':
-    sc = threading.Thread(target = scan, args=())
-    sc.start()
-    while True:
-        print 'start'
-        GPIO.output(21, True)
-        for beacon in returnedList:
-            beacon_data = beacon.split(',')
-            _uuid = beacon_data[1]
-            _major = beacon_data[2]
-            _minor = beacon_data[3]
-            _tx_power = beacon_data[4]
-            if _uuid == '08ffffff000102030408163412030102':
-                                print 'on'
-                                GPIO.output(21, False)
-                                time.sleep(5)
-                                print 'off'
-                                GPIO.output(21,True)
-                                time.sleep(5)
-                                del returnedList[:]
-                                lock.release()
-                                break
-
-
+	sc = threading.Thread(target = scan, args=())
+	sc.start()
+	while True:
+		print 'start'
+		GPIO.output(21, True)
+		for beacon in returnedList:
+			beacon_data = beacon.split(',')
+			_uuid = beacon_data[1]
+			_major = beacon_data[2]
+			_minor = beacon_data[3]
+			_tx_power = beacon_data[4]
+			print beacon
+			if _uuid == '08ffffff000102030408163412030102':
+				print 'on'
+				GPIO.output(21, False)
+				time.sleep(5)
+				print 'off'
+				GPIO.output(21,True)
+				time.sleep(5)
+				del returnedList[:]
+				lock.release()
+				break
