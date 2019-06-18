@@ -49,7 +49,7 @@ def scan():
 
 if __name__=='__main__':
     sc = threading.Thread(target = scan, args=())
-        sc.start()
+    sc.start()
     while True:
         print 'start'
         GPIO.output(21, True)
@@ -69,4 +69,5 @@ if __name__=='__main__':
                                 del returnedList[:]
                                 lock.release()
                                 break
+
 
