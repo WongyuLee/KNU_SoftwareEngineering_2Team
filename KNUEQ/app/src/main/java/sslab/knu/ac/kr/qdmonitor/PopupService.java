@@ -18,6 +18,7 @@ public class PopupService extends Activity {
     TextView Levelview;
     ImageView ImageView;
     TextView Countermeasuresview;
+    MediaPlayer m = new MediaPlayer();
     //String Level1CM = getString(R.string.Level1CM);
     //String Level2CM = getString(R.string.Level2CM);
     //String Level3CM = getString(R.string.Level3CM);
@@ -31,7 +32,6 @@ public class PopupService extends Activity {
         Countermeasuresview = (TextView)findViewById(R.id.Countermeasures);
         Intent intent = getIntent();
         String Level = intent.getStringExtra("Level");
-        MediaPlayer m = new MediaPlayer();
         Log.i(PopupService.class.getSimpleName(),"EQLevel = "+Level+"\n");
         switch (Level){
             case "1":
@@ -71,6 +71,8 @@ public class PopupService extends Activity {
     }
 
     public void mOnClose(View v){
+        m.stop();
+        m.release();
         this.finish();
     }
 
