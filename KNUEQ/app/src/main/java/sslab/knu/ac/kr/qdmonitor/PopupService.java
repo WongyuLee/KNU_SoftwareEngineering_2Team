@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -25,6 +24,7 @@ public class PopupService extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_popup_service);
         Levelview = (TextView)findViewById(R.id.Level);
@@ -71,8 +71,10 @@ public class PopupService extends Activity {
     }
 
     public void mOnClose(View v){
-        m.stop();
-        m.release();
+        if(m.isPlaying()){
+            m.stop();
+            m.release();
+        }
         this.finish();
     }
 

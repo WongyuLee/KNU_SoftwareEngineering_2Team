@@ -16,6 +16,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.ParcelUuid;
 import android.os.PowerManager;
@@ -27,7 +29,8 @@ import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 
@@ -46,7 +49,10 @@ public class BeaconReceiver extends Service {
     String EQLevel1 = "01 01 02 03 04 ";
     String EQLevel2 = "02 01 02 03 04 ";
     String EQLevel3 = "03 01 02 03 04 ";
-    int curlevel = 0;
+    Timer ScanningTimer = null;
+    TimerTask ScanningTask;
+    final Handler handler = new Handler();
+    private boolean isScanning = false;
     private static final ParcelUuid UID_SERVICE =
             ParcelUuid.fromString("00001234-0000-1000-8000-00805f9b34fb");
     public BeaconReceiver() {
@@ -97,7 +103,14 @@ public class BeaconReceiver extends Service {
         scanFilter.setDeviceAddress("B8:27:EB:CA:53:A6"); //ex) 00:00:00:00:00:00
         ScanFilter scan = scanFilter.build();
         scanFilters.add(scan);
-        mBluetoothLeScanner.startScan(scanFilters, scanSettings, mScanCallback);
+        if(isScanning == false){
+            mBluetoothLeScanner.startScan(scanFilters, scanSettings, mScanCallback);
+            isScanning = true;
+        }
+        if(ScanningTimer != null){
+            ScanningTimer.cancel();
+        }
+        ScanningTimer = new Timer();
     }
 
     ScanCallback mScanCallback = new ScanCallback() {
@@ -106,30 +119,36 @@ public class BeaconReceiver extends Service {
             super.onScanResult(callbackType, result);
             try {
                 String EqLevel;
-                ScanRecord scanRecord = result.getScanRecord();
+                //ScanRecord scanRecord = result.getScanRecord();
                 //Log.d("getTxPowerLevel()",scanRecord.getTxPowerLevel()+"");
                 EqLevel = byteArrayToHex(result.getScanRecord().getServiceData(UID_SERVICE));
                 //Log.d("onScanResult()", result.getDevice().getAddress() + "\n" + result.getRssi() + "\n" + result.getDevice().getName()
                         //+ "\n" + result.getDevice().getBondState() + "\n" + result.getDevice().getType() +"\n" + test +"\n" + EQLevel1);
 
-                if(EqLevel.equals(EQLevel1) && curlevel != 1){
+                if(EqLevel.equals(EQLevel1)){
                     Log.d("detect eq()","level 1");
-                    curlevel = 1;
                     Intent intent1 = new Intent(getApplicationContext(), PopupService.class);
                     intent1.putExtra("Level", String.valueOf(1));
                     startActivity(intent1);
-                } else if(EqLevel.equals(EQLevel2) && curlevel != 2){
+                    mBluetoothLeScanner.stopScan(mScanCallback);
+                    isScanning = false;
+                    startScanning();
+                } else if(EqLevel.equals(EQLevel2)){
                     Log.d("detect eq()","level 2");
-                    curlevel = 2;
                     Intent intent1 = new Intent(getApplicationContext(), PopupService.class);
                     intent1.putExtra("Level", String.valueOf(2));
                     startActivity(intent1);
-                } else if(EqLevel.equals(EQLevel3) && curlevel != 3){
+                    mBluetoothLeScanner.stopScan(mScanCallback);
+                    isScanning = false;
+                    startScanning();
+                } else if(EqLevel.equals(EQLevel3)){
                     Log.d("detect eq()","level 3");
-                    curlevel = 3;
                     Intent intent1 = new Intent(getApplicationContext(), PopupService.class);
                     intent1.putExtra("Level", String.valueOf(3));
                     startActivity(intent1);
+                    mBluetoothLeScanner.stopScan(mScanCallback);
+                    isScanning = false;
+                    startScanning();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -167,4 +186,22 @@ public class BeaconReceiver extends Service {
         return sb.toString();
     }
 
+    private void startScanning(){
+        ScanningTask = new TimerTask() {
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(!isScanning ){
+                            ScanSettings scanSettings = mScanSettings.build();
+                            mBluetoothLeScanner.startScan(scanFilters, scanSettings, mScanCallback);
+                            isScanning = true;
+                        }
+                    }
+                });
+            }
+        };
+        //5second
+        ScanningTimer.schedule(ScanningTask,5000);
+    }
 }

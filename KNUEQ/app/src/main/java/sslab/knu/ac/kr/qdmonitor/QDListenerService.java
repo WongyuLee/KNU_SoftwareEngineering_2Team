@@ -10,7 +10,6 @@ import android.util.Log;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Locale;
 
 import sslab.knu.ac.kr.qdmonitor.packet.QDDataPacket;
 import sslab.knu.ac.kr.qdmonitor.packet.QDPacket;
