@@ -26,17 +26,16 @@ public class SelectActivity extends AppCompatActivity {
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS);
 
-        scanbutton = (Button)findViewById(R.id.bleCallButton);
-        stopscanbutton = (Button)findViewById(R.id.bleStopButton);
-    }
-
-    public void callBeaconReceiverActivity(View view) {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
+        scanbutton = (Button)findViewById(R.id.bleCallButton);
+        stopscanbutton = (Button)findViewById(R.id.bleStopButton);
+    }
 
+    public void callBeaconReceiverActivity(View view) {
         Intent intent = new Intent(this, BeaconReceiver.class);
         startService(intent);
         stopscanbutton.setVisibility(View.VISIBLE);
