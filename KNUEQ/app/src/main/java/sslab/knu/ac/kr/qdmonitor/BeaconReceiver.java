@@ -9,18 +9,15 @@ import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
-import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.ParcelUuid;
-import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -36,7 +33,6 @@ import java.util.Vector;
 
 public class BeaconReceiver extends Service {
     public static final String TAG = BeaconReceiver.class.getSimpleName();
-    private PowerManager.WakeLock wakeLock;
     NotificationCompat.Builder mBuilder;
     BeaconManager mBeaconManager;
     BluetoothAdapter mBluetoothAdapter;

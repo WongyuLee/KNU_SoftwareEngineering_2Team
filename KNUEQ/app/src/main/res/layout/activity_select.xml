@@ -4,26 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SelectActivity">
+    tools:context=".SelectActivity"
+    android:background="@drawable/knu_logo">
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
         android:src="@drawable/ble_icon"
         app:layout_constraintBottom_toTopOf="@id/bleCallButton"
         app:layout_constraintLeft_toLeftOf="@id/bleCallButton"
-        app:layout_constraintRight_toRightOf="@id/bleCallButton"/>
+        app:layout_constraintRight_toRightOf="@id/bleCallButton" />
 
     <Button
         android:id="@+id/bleCallButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="callBeaconReceiverActivity"
-        android:text="BLEMode"
+        android:text="지진감지 신호 수신"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.241"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.551"
+        android:visibility="visible"/>
+
+    <Button
+        android:id="@+id/bleStopButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="StopReceive"
+        android:text="감지신호 수신 종료"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.241"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.551"
+        android:visibility="invisible"/>
 
     <ImageView
         android:layout_width="136dp"
@@ -31,23 +49,24 @@
         android:layout_marginBottom="4dp"
         android:src="@drawable/wifi_icon"
         app:layout_constraintBottom_toTopOf="@id/wifiCallButton"
+        app:layout_constraintHorizontal_bias="0.576"
         app:layout_constraintLeft_toLeftOf="@id/wifiCallButton"
-        app:layout_constraintRight_toRightOf="@id/wifiCallButton"
-        android:visibility="invisible"/>
+        app:layout_constraintRight_toRightOf="@id/wifiCallButton" />
 
     <Button
         android:id="@+id/wifiCallButton"
-        android:layout_width="92dp"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
         android:onClick="callDeviceSetActivity"
-        android:text="WiFiMode"
+        android:text="지진동경보기 제어"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.027"
         app:layout_constraintStart_toEndOf="@+id/bleCallButton"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
+        app:layout_constraintVertical_bias="0.553" />
 </android.support.constraint.ConstraintLayout>

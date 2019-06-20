@@ -7,12 +7,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 
 public class SelectActivity extends AppCompatActivity {
     BluetoothAdapter mBluetoothAdapter;
     private static final int REQUEST_ENABLE_BT = 100;
     private static final int PERMISSIONS = 10;
+    Button scanbutton;
+    Button stopscanbutton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +26,8 @@ public class SelectActivity extends AppCompatActivity {
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS);
 
+        scanbutton = (Button)findViewById(R.id.bleCallButton);
+        stopscanbutton = (Button)findViewById(R.id.bleStopButton);
     }
 
     public void callBeaconReceiverActivity(View view) {
@@ -33,10 +39,24 @@ public class SelectActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, BeaconReceiver.class);
         startService(intent);
+        stopscanbutton.setVisibility(View.VISIBLE);
+        scanbutton.setVisibility(View.INVISIBLE);
     }
 
     public void callDeviceSetActivity(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        Toast.makeText(SelectActivity.this, "미구현", Toast.LENGTH_SHORT).show();
+        //Intent intent = new Intent(this, MainActivity.class);
+        //startActivity(intent);
+    }
+
+    public void StopReceive(View view) {
+        Intent intent = new Intent(this, BeaconReceiver.class);
+        stopService(intent);
+        Toast.makeText(SelectActivity.this, "수신종료", Toast.LENGTH_SHORT).show();
+        stopscanbutton.setVisibility(View.INVISIBLE);
+        scanbutton.setVisibility(View.VISIBLE);
+
+        //Intent intent = new Intent(this, MainActivity.class);
+        //startActivity(intent);
     }
 }
